@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>中等</title>
+  </head>
+  <body>
+    <script>
+      /* 
+        给你一个大小为 m x n 的矩阵 mat ，请以对角线遍历的顺序，用一个数组返回这个矩阵中的所有元素。
+        示例 1：
+        输入：mat = [[1,2,3],[4,5,6],[7,8,9]]
+        输出：[1,2,4,7,5,3,6,8,9]
+        示例 2：
+        输入：mat = [[1,2],[3,4]]
+        输出：[1,2,3,4]
+        提示：
+        m == mat.length
+        n == mat[i].length
+        1 <= m, n <= 104
+        1 <= m * n <= 104
+        -105 <= mat[i][j] <= 105
+        */
+      /**
+       * @param {number[][]} mat
+       * @return {number[]}
+       */
+      /* 
+      这题目难点在于如何确定边界，只有确定了正确的边界条件才可以对边界数据进行循环检查
+      为了更方便设计 也必须设计一个坐标系来控制  这里的坐标系是使用了第四象限座位正坐标系来解答的
+      向下方向对应x+（m）向右方向对应y+(n)
+      边界条件为0=<x<m  0=<y<n
+      */
+      var findDiagonalOrder = function (mat) {
+        const m = mat.length;
+        const n = mat[0].length;
+        const res = new Array(m * n).fill(0);
+        let pos = 0;
+        for (let i = 0; i < m + n - 1; i++) {
+          if (i % 2 === 1) {
+            //奇数
+            console.log(`奇数 当前i:${i}`);
+            let x = i < n ? 0 : i - n + 1;
+            let y = i < n ? i : n - 1;
+            console.log(`x:${x}-y:${y}`);
+            while (x < m && y >= 0) {
+              //这里其实就是进行左边界定义的
+              res[pos] = mat[x][y];
+              pos++;
+              x++;
+              y--;
+            }
+          } else {
+            //偶数
+            console.log(`偶数 当前i:${i}`);
+            let x = i < m ? i : m - 1;
+            let y = i < m ? 0 : i - m + 1;
+            console.log(`x:${x}-y:${y}`);
+            while (x >= 0 && y < n) {
+              //这里其实就是进行右边界定义的
+              res[pos] = mat[x][y];
+              pos++;
+              x--;//减成-1就不能再循环了
+              y++;
+              console.log(`修改xy后 x:${x}-y:${y}`);
+            }
+          }
+        }
+        return res;
+      };
+      let mat = [
+        [1, 2, 3],
+        [4, 5, 6],
+        [7, 8, 9],
+      ];
+      console.log("findDiagonalOrder:", JSON.stringify(findDiagonalOrder(mat)));
+    </script>
+  </body>
+</html>
